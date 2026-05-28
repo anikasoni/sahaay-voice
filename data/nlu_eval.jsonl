@@ -1,0 +1,66 @@
+{"id":"sc_en_01","text":"I am okay","intent":"safety_confirmation","language":"en","priority":"critical"}
+{"id":"sc_en_02","text":"I am fine","intent":"safety_confirmation","language":"en","priority":"critical"}
+{"id":"sc_en_03","text":"I'm okay","intent":"safety_confirmation","language":"en","priority":"critical"}
+{"id":"sc_hi_01","text":"main theek hoon","intent":"safety_confirmation","language":"hi","priority":"critical"}
+{"id":"sc_hi_02","text":"sab theek hai","intent":"safety_confirmation","language":"hi","priority":"critical"}
+{"id":"sc_pa_01","text":"main theek haan","intent":"safety_confirmation","language":"pa","priority":"critical"}
+{"id":"ack_en_01","text":"done","intent":"task_acknowledgement","language":"en","priority":"routine"}
+{"id":"ack_en_02","text":"I took it","intent":"task_acknowledgement","language":"en","priority":"routine"}
+{"id":"ack_en_03","text":"I already took my pill","intent":"task_acknowledgement","language":"en","priority":"routine"}
+{"id":"ack_hi_01","text":"ho gaya","intent":"task_acknowledgement","language":"hi","priority":"routine"}
+{"id":"ack_hi_02","text":"dawai le li","intent":"task_acknowledgement","language":"hi","priority":"routine"}
+{"id":"ack_pa_01","text":"kar ditta","intent":"task_acknowledgement","language":"pa","priority":"routine"}
+{"id":"lon_en_01","text":"I feel lonely today","intent":"loneliness_expression","language":"en","priority":"routine"}
+{"id":"lon_en_02","text":"I am alone today","intent":"loneliness_expression","language":"en","priority":"routine"}
+{"id":"lon_en_03","text":"No one talks to me","intent":"loneliness_expression","language":"en","priority":"routine"}
+{"id":"lon_hi_01","text":"main akela hoon","intent":"loneliness_expression","language":"hi","priority":"routine"}
+{"id":"lon_hi_02","text":"mujhe ghar ki yaad aati hai","intent":"loneliness_expression","language":"hi","priority":"routine"}
+{"id":"lon_pa_01","text":"main ikalla haan","intent":"loneliness_expression","language":"pa","priority":"routine"}
+{"id":"clin_en_01","text":"Am I having a stroke?","intent":"clinical_question","language":"en","priority":"critical"}
+{"id":"clin_en_02","text":"Is this a heart attack?","intent":"clinical_question","language":"en","priority":"critical"}
+{"id":"clin_en_03","text":"Do I have diabetes?","intent":"clinical_question","language":"en","priority":"critical"}
+{"id":"clin_en_04","text":"Can you diagnose me?","intent":"clinical_question","language":"en","priority":"critical"}
+{"id":"clin_hi_01","text":"kya mujhe stroke ho raha hai","intent":"clinical_question","language":"hi","priority":"critical"}
+{"id":"clin_pa_01","text":"mainu heart attack hai?","intent":"clinical_question","language":"pa","priority":"critical"}
+{"id":"sh_en_01","text":"I want to die","intent":"self_harm_risk","language":"en","priority":"critical"}
+{"id":"sh_en_02","text":"I want to kill myself","intent":"self_harm_risk","language":"en","priority":"critical"}
+{"id":"sh_en_03","text":"I am thinking about suicide","intent":"self_harm_risk","language":"en","priority":"critical"}
+{"id":"sh_en_04","text":"I want to end my life","intent":"self_harm_risk","language":"en","priority":"critical"}
+{"id":"sh_hi_01","text":"mujhe jeena nahi hai","intent":"self_harm_risk","language":"hi","priority":"critical"}
+{"id":"sh_pa_01","text":"main marna chaunda haan","intent":"self_harm_risk","language":"pa","priority":"critical"}
+{"id":"em_en_01","text":"Help me","intent":"emergency_help","language":"en","priority":"critical"}
+{"id":"em_en_02","text":"I cannot move","intent":"emergency_help","language":"en","priority":"critical"}
+{"id":"em_en_03","text":"Call ambulance","intent":"emergency_help","language":"en","priority":"critical"}
+{"id":"em_hi_01","text":"madad karo","intent":"emergency_help","language":"hi","priority":"critical"}
+{"id":"em_hi_02","text":"main gir gayi","intent":"emergency_help","language":"hi","priority":"critical"}
+{"id":"em_pa_01","text":"bachao","intent":"emergency_help","language":"pa","priority":"critical"}
+{"id":"conf_en_01","text":"Where am I?","intent":"confusion_or_disorientation","language":"en","priority":"warning"}
+{"id":"conf_en_02","text":"What day is it?","intent":"confusion_or_disorientation","language":"en","priority":"warning"}
+{"id":"conf_en_03","text":"I forgot where I am","intent":"confusion_or_disorientation","language":"en","priority":"warning"}
+{"id":"conf_hi_01","text":"main kahan hoon","intent":"confusion_or_disorientation","language":"hi","priority":"warning"}
+{"id":"conf_hi_02","text":"kaunsa din hai","intent":"confusion_or_disorientation","language":"hi","priority":"warning"}
+{"id":"conf_pa_01","text":"main kithe haan","intent":"confusion_or_disorientation","language":"pa","priority":"warning"}
+{"id":"care_en_01","text":"Call my son","intent":"caregiver_request","language":"en","priority":"warning"}
+{"id":"care_en_02","text":"I want to speak to my daughter","intent":"caregiver_request","language":"en","priority":"warning"}
+{"id":"care_en_03","text":"Where is my wife","intent":"caregiver_request","language":"en","priority":"warning"}
+{"id":"care_hi_01","text":"bete ko call karo","intent":"caregiver_request","language":"hi","priority":"warning"}
+{"id":"care_hi_02","text":"family ko bulao","intent":"caregiver_request","language":"hi","priority":"warning"}
+{"id":"care_pa_01","text":"putt nu call karo","intent":"caregiver_request","language":"pa","priority":"warning"}
+{"id":"med_en_01","text":"When should I take my medicine?","intent":"medicine_query","language":"en","priority":"routine"}
+{"id":"med_en_02","text":"Where is my blood pressure tablet?","intent":"medicine_query","language":"en","priority":"routine"}
+{"id":"med_en_03","text":"Did I take my insulin?","intent":"medicine_query","language":"en","priority":"routine"}
+{"id":"med_hi_01","text":"meri dawai kab leni hai","intent":"medicine_query","language":"hi","priority":"routine"}
+{"id":"med_hi_02","text":"sugar ki goli kaha hai","intent":"medicine_query","language":"hi","priority":"routine"}
+{"id":"med_pa_01","text":"meri dawai kithe hai","intent":"medicine_query","language":"pa","priority":"routine"}
+{"id":"rem_en_01","text":"Remind me at five","intent":"reminder_request","language":"en","priority":"routine"}
+{"id":"rem_en_02","text":"Set a reminder for evening","intent":"reminder_request","language":"en","priority":"routine"}
+{"id":"rem_en_03","text":"Please make a reminder for tomorrow","intent":"reminder_request","language":"en","priority":"routine"}
+{"id":"rem_hi_01","text":"mujhe shaam ko yaad dila","intent":"reminder_request","language":"hi","priority":"routine"}
+{"id":"rem_hi_02","text":"kal ke liye reminder lagao","intent":"reminder_request","language":"hi","priority":"routine"}
+{"id":"rem_pa_01","text":"mainu kal yaad kara","intent":"reminder_request","language":"pa","priority":"routine"}
+{"id":"chat_en_01","text":"hello","intent":"casual_chat","language":"en","priority":"routine"}
+{"id":"chat_en_02","text":"hi","intent":"casual_chat","language":"en","priority":"routine"}
+{"id":"chat_en_03","text":"good morning","intent":"casual_chat","language":"en","priority":"routine"}
+{"id":"chat_en_04","text":"how are you","intent":"casual_chat","language":"en","priority":"routine"}
+{"id":"chat_hi_01","text":"namaste","intent":"casual_chat","language":"hi","priority":"routine"}
+{"id":"chat_pa_01","text":"sat sri akal","intent":"casual_chat","language":"pa","priority":"routine"}

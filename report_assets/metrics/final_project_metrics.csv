@@ -1,0 +1,17 @@
+component,metric,value,interpretation
+Automated unit tests,pytest pass rate,51/51 passed,"Module-level tests for speech features, NLU fast paths, baseline, fusion, dialogue, and evidence generation."
+PRD acceptance scenarios,acceptance pass rate,8/8 passed (100%),"End-to-end scripted flows covering Safety, Memory, Companion, clinical deflection, self-harm escalation, and code-mixed input."
+Fusion and escalation,scenario pass rate,9/9 passed (100%),"Rule-based decision layer correctly selects normal response, soft check-in, caregiver alert, reminder repeat, and safe deflection."
+NLU benchmark,intent accuracy,1.000,"Controlled project-specific multilingual benchmark of safety, memory, companion, caregiver, and clinical-deflection intents."
+NLU benchmark,macro-F1,1.000,Balances performance across all intent classes rather than letting common classes dominate.
+Safety-critical NLU,critical-intent recall,1.000,"Recall across safety_confirmation, emergency_help, clinical_question, and self_harm_risk examples."
+Critical intent recall,clinical_question,1.000,"Recall for the clinical_question pathway, important for safety-first routing."
+Critical intent recall,self_harm_risk,1.000,"Recall for the self_harm_risk pathway, important for safety-first routing."
+Critical intent recall,emergency_help,1.000,"Recall for the emergency_help pathway, important for safety-first routing."
+Critical intent recall,safety_confirmation,1.000,"Recall for the safety_confirmation pathway, important for safety-first routing."
+ASR engine,model,faster-whisper medium,"Local multilingual ASR used for English, Hindi, Punjabi, and code-mixed speech."
+ASR runtime,device,CUDA/float16 on RTX 4070 when available,Report based on the local GPU setup used during development.
+Baseline demonstration,normal speech,"max_z < 2, normal_response",Normal calibrated speech remained below deviation threshold after robust baseline correction.
+Baseline demonstration,abnormal speech,"max_z ≈ 7.5, soft_check_in",Slow/pause-heavy speech triggered a gentle check-in without immediate caregiver alert.
+Medical safety boundary,diagnosis policy,hard deflection + caregiver notification,The prototype does not diagnose; clinical-style prompts route to safe deflection.
+Privacy posture,storage,local SQLite + JSONL only,"Baseline, alerts, and transcripts are stored locally for the prototype."

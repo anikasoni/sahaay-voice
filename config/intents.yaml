@@ -1,0 +1,88 @@
+# Sahaay Voice — NLU intent registry.
+# Used by both the zero-shot classifier (hypothesis templates) and the
+# fine-tuning pipeline (label list).
+
+intents:
+  emergency_help:
+    description: "user is in immediate distress and asking for help"
+    examples:
+      en: ["help me", "I have fallen", "I cannot move", "call someone"]
+      hi: ["bachao", "main gir gaya", "madad chahiye", "kisi ko bulao"]
+      pa: ["bachao", "main dig gaya", "madad chahidi", "kise nu bulavo"]
+
+  safety_confirmation:
+    description: "user is confirming they are okay"
+    examples:
+      en: ["I am okay", "I am fine", "yes I am alright", "no problem"]
+      hi: ["main theek hoon", "sab theek hai", "haan main thik hoon"]
+      pa: ["main theek haan", "sab theek hai", "haan main theek haan"]
+
+  medicine_query:
+    description: "user is asking about medication"
+    examples:
+      en: ["did I take my medicine", "what is my pill", "my BP tablet"]
+      hi: ["maine dawai li ya nahi", "meri goli kaunsi hai"]
+      pa: ["maine dawai layi ya nahi", "meri goli kehri hai"]
+
+  reminder_request:
+    description: "user is asking the system to remind them of something"
+    examples:
+      en: ["remind me at five", "tell me when it is time", "set a reminder"]
+      hi: ["paanch baje yaad dilana", "samay par batana"]
+      pa: ["panj vaje yaad karauna", "vele te dassna"]
+
+  loneliness_expression:
+    description: "user expresses sadness, loneliness, or low mood"
+    examples:
+      en: ["I feel so alone", "no one comes to see me", "I miss my children"]
+      hi: ["main akela hoon", "koi nahi aata", "bachhon ki yaad aati hai"]
+      pa: ["main ikalla haan", "koi nahi aanda", "bacheyaan di yaad"]
+
+  confusion_or_disorientation:
+    description: "user sounds confused, disoriented, or cannot remember basic things"
+    examples:
+      en: ["where am I", "what day is it", "who are you", "I forgot"]
+      hi: ["main kahan hoon", "aaj kaunsa din hai", "main bhool gaya"]
+      pa: ["main kithe haan", "ajj kehra din hai", "main bhul gaya"]
+
+  casual_chat:
+    description: "user is making small talk or greeting"
+    examples:
+      en: ["hello", "good morning", "how are you", "nice weather today"]
+      hi: ["namaste", "subah achhi hai", "kaise ho"]
+      pa: ["sat sri akal", "subah changi hai", "kiwein ho"]
+
+  caregiver_request:
+    description: "user wants to talk to or contact a family member or caregiver"
+    examples:
+      en: ["call my son", "I want to speak to my daughter", "where is my family"]
+      hi: ["bete ko phone karo", "beti se baat karni hai"]
+      pa: ["putt nu phone karo", "dhee naal gall karni hai"]
+
+
+  task_acknowledgement:
+    description: "user acknowledges that a reminder or requested task is completed"
+    examples:
+      en: ["done", "I took it", "I already took my medicine", "finished"]
+      hi: ["ho gaya", "maine le li", "dawai le li", "kar diya"]
+      pa: ["ho gaya", "main lai layi", "dawai le layi", "kar ditta"]
+
+  self_harm_risk:
+    description: "user expresses self-harm, suicidal thinking, or severe distress requiring caregiver notification"
+    examples:
+      en: ["I want to die", "I want to kill myself", "I cannot live anymore"]
+      hi: ["main marna chahta hoon", "jeena nahi chahta", "khud ko maarna chahta hoon"]
+      pa: ["main marna chaunda haan", "jeena nahi chaunda", "apne aap nu maarna chaunda haan"]
+
+  clinical_question:
+    description: "user is asking for a medical diagnosis, opinion, or interpretation"
+    examples:
+      en: ["am I having a stroke", "is this a heart attack", "do I have cancer"]
+      hi: ["kya mujhe stroke ho raha hai", "kya yeh heart attack hai"]
+      pa: ["ki mainu stroke ho riha hai", "ki eh heart attack hai"]
+
+emotions:
+  calm: "the speaker sounds calm and relaxed"
+  sad: "the speaker sounds sad, downcast, or sorrowful"
+  anxious: "the speaker sounds anxious, worried, or frightened"
+  confused: "the speaker sounds confused or disoriented"

@@ -1,0 +1,88 @@
+# Sahaay Voice — all user-facing strings.
+# Keep tone warm, age-appropriate, never alarming. Short sentences.
+
+safety:
+  soft_checkin:
+    en: "I noticed you may not sound like yourself. Are you feeling okay? Please say, I am okay."
+    hi: "Mujhe laga aapki awaaz thodi alag hai. Kya aap theek hain? Kripya kahein, main theek hoon."
+    pa: "Mainu lagya tuhadi awaaz thodi alag hai. Ki tusi theek ho? Kirpa karke kaho, main theek haan."
+  ask_confirmation:
+    en: "Are you okay? Please say, I am okay."
+    hi: "Kya aap theek hain? Kripya kahein, main theek hoon."
+    pa: "Ki tusi theek ho? Kirpa karke kaho, main theek haan."
+  ask_repeat:
+    en: "I did not hear you clearly. Please say once more, I am okay."
+    hi: "Maaf kijiye, theek se nahi suna. Ek baar aur kahein, main theek hoon."
+    pa: "Maaf karna, theek tarah nahi suni. Ek vaar fer kaho, main theek haan."
+  confirmed_ok:
+    en: "Good to hear. I am here if you need me."
+    hi: "Sun kar accha laga. Zarurat ho to main hoon."
+    pa: "Sun ke vadhiya lagya. Lod hove te main haan."
+  escalated:
+    en: "I have informed your family. They will be with you soon."
+    hi: "Maine aapke parivaar ko bata diya hai. Wo jaldi aapke paas honge."
+    pa: "Main tuhade parivaar nu dass dita hai. Oh jaldi tuhade kol honge."
+
+companion:
+  greeting:
+    en: "Hello. It is nice to hear your voice. How are you feeling today?"
+    hi: "Namaste. Aapki awaaz sun kar khushi hui. Aaj kaisa lag raha hai?"
+    pa: "Sat sri akal. Tuhadi awaaz sun ke khushi hoyi. Ajj kiwein lag riha hai?"
+  empathetic_lonely:
+    en: "I hear you. Being alone can feel heavy sometimes. I am right here with you."
+    hi: "Main samajh sakta hoon. Akele rehna kabhi bhaari lagta hai. Main aapke saath hoon."
+    pa: "Main samajh sakda haan. Ikalle rehna kade bhaari lagda hai. Main tuhade naal haan."
+  empathetic_soft_checkin:
+    en: "I hear you. Being alone can feel heavy sometimes, and I am right here with you. I also noticed your voice sounded a little different today. Are you feeling okay?"
+    hi: "Main samajh sakta hoon. Akele rehna kabhi bhaari lagta hai, aur main aapke saath hoon. Mujhe aaj aapki awaaz thodi alag lagi. Kya aap theek hain?"
+    pa: "Main samajh sakda haan. Ikalle rehna kade bhaari lagda hai, te main tuhade naal haan. Ajj tuhadi awaaz thodi alag laggi. Ki tusi theek ho?"
+  positive_engagement:
+    en: "That sounds lovely. Tell me more about it."
+    hi: "Bahut accha laga sunkar. Aur batayein."
+    pa: "Bahut vadhiya. Hor dasso."
+  acknowledge:
+    en: "Thank you for sharing that with me."
+    hi: "Mujhe batane ke liye dhanyavaad."
+    pa: "Mainu dasan layi dhanvaad."
+  self_harm_response:
+    en: "I am very glad you told me. You are not alone. I will let your family know right now."
+    hi: "Aapne mujhe bataya, iske liye shukriya. Aap akele nahi hain. Main abhi aapke parivaar ko bata raha hoon."
+    pa: "Tusi mainu dassia, eh changi gall hai. Tusi ikalle nahi ho. Main hune tuhade parivaar nu dass riha haan."
+  fallback:
+    en: "I am here, listening."
+    hi: "Main hoon, sun raha hoon."
+    pa: "Main haan, sun riha haan."
+
+memory:
+  reminder_prefix:
+    en: "Gentle reminder."
+    hi: "Ek pyaari yaad dehani."
+    pa: "Ik pyari yaad."
+  ask_ack:
+    en: "Please say, done, when you have taken it."
+    hi: "Kripya kahein, ho gaya, jab aap le lein."
+    pa: "Kirpa karke kaho, ho gaya, jadon tusi le lavo."
+  ack_received:
+    en: "Wonderful. I have noted it."
+    hi: "Bahut accha. Maine note kar liya."
+    pa: "Vadhiya. Maine note kar lyaa."
+  repeat_reminder:
+    en: "Just a small reminder again."
+    hi: "Ek choti si yaad dehani phir se."
+    pa: "Ik chhoti jihi yaad fer ton."
+
+clinical_deflection:
+  # Used for ANY clinical_question intent. Never diagnose.
+  en: "I cannot answer medical questions, but I am letting your family know so they can help you. Please rest for a moment."
+  hi: "Main medical sawaalon ka jawab nahi de sakta, par main aapke parivaar ko bata raha hoon taaki wo madad kar sakein. Thodi der aaram kijiye."
+  pa: "Main medical sawaalan da jawab nahi de sakda, par main tuhade parivaar nu dass riha haan tan jo oh madad kar sakan. Thodi der aaram karo."
+
+error:
+  asr_failed:
+    en: "Sorry, I did not catch that clearly. Could you please repeat it slowly?"
+    hi: "Maaf kijiye, main theek se samajh nahi paya. Kripya dheere se phir se kahein."
+    pa: "Maaf karna, main theek tarah samajh nahi paya. Kirpa karke hauli jeha fer ton kaho."
+  tts_failed:
+    en: "(speaker error — text shown above)"
+    hi: "(awaaz mein dikkat — upar likha hai)"
+    pa: "(awaaz vich dikkat — utte likhya hai)"

@@ -1,0 +1,74 @@
+{
+  "timestamp": "2026-05-28T15:53:34",
+  "fusion": {
+    "n": 9,
+    "pass": 9,
+    "fail": 0,
+    "pass_rate": 1.0,
+    "rows": [
+      {
+        "name": "calm chit-chat",
+        "expected": "normal_response",
+        "got": "normal_response",
+        "reason": "ok",
+        "pass": true
+      },
+      {
+        "name": "clinical question → safe deflection",
+        "expected": "safe_deflection",
+        "got": "safe_deflection",
+        "reason": "clinical question deflected and caregiver notified",
+        "pass": true
+      },
+      {
+        "name": "explicit emergency",
+        "expected": "caregiver_alert",
+        "got": "caregiver_alert",
+        "reason": "user requested help",
+        "pass": true
+      },
+      {
+        "name": "fall (no pending safety) → enter safety",
+        "expected": "normal_response",
+        "got": "normal_response",
+        "reason": "fall reported — initiating safety check",
+        "pass": true
+      },
+      {
+        "name": "fall + safety pending + bad reply → alert",
+        "expected": "caregiver_alert",
+        "got": "caregiver_alert",
+        "reason": "fall reported and no clear confirmation",
+        "pass": true
+      },
+      {
+        "name": "safety pending + clear good reply → normal",
+        "expected": "normal_response",
+        "got": "normal_response",
+        "reason": "safety check confirmed",
+        "pass": true
+      },
+      {
+        "name": "reminder unack escalates",
+        "expected": "caregiver_alert",
+        "got": "caregiver_alert",
+        "reason": "reminder not acknowledged after 3 attempts",
+        "pass": true
+      },
+      {
+        "name": "strong baseline deviation → soft check-in",
+        "expected": "soft_check_in",
+        "got": "soft_check_in",
+        "reason": "speech pattern deviates from baseline (max_z=3.0, features_off=3)",
+        "pass": true
+      },
+      {
+        "name": "mild deviation without history → normal",
+        "expected": "normal_response",
+        "got": "normal_response",
+        "reason": "ok",
+        "pass": true
+      }
+    ]
+  }
+}

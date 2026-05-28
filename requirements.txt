@@ -1,0 +1,49 @@
+# Sahaay Voice — Python dependencies
+# Tested with Python 3.10/3.11. RTX 4070 with CUDA 12.x.
+#
+# For CUDA-enabled torch on Windows/Linux, install torch FIRST from the
+# official index so the wheel matches your CUDA version:
+#
+#   pip install torch --index-url https://download.pytorch.org/whl/cu121
+#
+# Then install the rest:
+#
+#   pip install -r requirements.txt
+
+# -- core runtime
+streamlit==1.40.2
+pyyaml>=6.0
+numpy>=1.24,<2.0
+scipy>=1.11
+requests>=2.31
+
+# -- audio I/O & DSP
+sounddevice>=0.4.6
+soundfile>=0.12.1
+librosa>=0.10.1
+# webrtcvad ships pre-built wheels on Linux/macOS. On Windows you may need:
+#   pip install webrtcvad-wheels
+webrtcvad>=2.0.10
+
+# -- ASR
+faster-whisper>=1.0.3
+# faster-whisper pulls ctranslate2; nothing else needed
+
+# -- NLU
+transformers>=4.41
+sentencepiece>=0.2.0
+# torch listed separately above (CUDA wheel)
+
+# -- TTS
+gTTS>=2.5.1
+pyttsx3>=2.90
+# Optional: Coqui XTTS-v2 — uncomment if you want local Hindi/English TTS
+# TTS>=0.22.0
+
+# -- fine-tuning (optional, only needed for scripts/finetune_muril.py)
+datasets>=2.18
+scikit-learn>=1.3
+accelerate>=0.27
+
+# -- tests
+pytest>=8.0

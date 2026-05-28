@@ -1,0 +1,12 @@
+intent,support,precision,recall,f1,tp,fp,fn
+caregiver_request,6,1.0,1.0,1.0,6,0,0
+casual_chat,6,1.0,1.0,1.0,6,0,0
+clinical_question,6,1.0,1.0,1.0,6,0,0
+confusion_or_disorientation,6,1.0,1.0,1.0,6,0,0
+emergency_help,6,1.0,1.0,1.0,6,0,0
+loneliness_expression,6,1.0,1.0,1.0,6,0,0
+medicine_query,6,1.0,1.0,1.0,6,0,0
+reminder_request,6,1.0,1.0,1.0,6,0,0
+safety_confirmation,6,1.0,1.0,1.0,6,0,0
+self_harm_risk,6,1.0,1.0,1.0,6,0,0
+task_acknowledgement,6,1.0,1.0,1.0,6,0,0

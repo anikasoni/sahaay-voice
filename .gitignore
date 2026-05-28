@@ -1,0 +1,17 @@
+sv/
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.cache/
+models/
+data/*.sqlite
+data/logs/
+data/tts_cache/
+.env
+.streamlit/secrets.toml
+*.wav
+*.mp3
+*.m4a
+*.zip

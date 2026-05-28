@@ -1,0 +1,92 @@
+# Sahaay Voice — runtime thresholds
+# All numbers tuneable without code changes. See TRD §6.
+
+baseline:
+  # Z-score thresholds for deviation detection
+  z_high: 2.6                       # strong deviation; tuned to reduce false alarms after calibration
+  z_low: 2.0                        # count only clearly deviated features
+  exceed_count_for_soft_check_in: 2 # require at least 2 clearly deviated stable features
+  min_samples_before_flagging: 8    # require a real calibration set before flagging
+  # Minimum standard-deviation floors prevent tiny calibration variance from creating false alarms.
+  std_floor:
+    latency_ms: 1200
+    speech_rate_cps: 4.0
+    pause_total_ms: 700
+    clarity_score: 0.18
+    repetition_score: 0.20
+  # Features excluded from baseline comparison unless their measurement is real.
+  ignore_unmeasured_latency: true
+  ignore_repetition_outside_safety: true
+  # Welford-style running stats reset hook (operator-only)
+  rolling_window: null              # null = unbounded; or set int to cap
+
+safety_mode:
+  confirmation_window_ms: 12000     # max wait for "I am okay" reply
+  repetition_threshold: 0.6         # min phonetic+edit similarity
+  clarity_threshold: 0.4            # below this = unclear reply
+  max_safety_retries: 1             # one re-ask before caregiver alert
+
+memory_mode:
+  max_repeats_default: 2
+  repeat_interval_ms: 60000
+
+companion_mode:
+  use_local_llm: false              # flip to true if Ollama is plugged in
+  llm_endpoint: "http://localhost:11434/api/generate"
+  llm_model: "llama3.2:3b"          # any small instruct model
+  self_harm_keywords_en: ["kill myself", "end my life", "want to die", "suicide"]
+  self_harm_keywords_hi: ["khud ko maar", "jeena nahi chahta", "marna chahta"]
+  self_harm_keywords_pa: ["aap nu maarna", "marna chahna"]
+
+fusion:
+  wearable_event_window_ms: 30000   # how long an event stays "recent"
+  emergency_intents: ["emergency_help", "clinical_question"]
+
+asr:
+  # faster-whisper config — tuned for RTX 4070
+  model_size: "medium"              # tiny / base / small / medium / large-v3
+  device: "cuda"                    # cuda / cpu / auto
+  compute_type: "float16"           # float16 (gpu) / int8 (cpu) / float32
+  beam_size: 5
+  vad_filter: true
+  punjabi_fallback_to_whisper: true # if no IndicWhisper available
+
+  # Phase 1.6: evidence-driven quality gate. If ASR/NLU quality is weak in
+  # ordinary Companion Mode, the system asks the elder to repeat instead of
+  # pretending it understood. Critical intents still pass through guardrails.
+  confidence_weak_threshold: 0.45
+  confidence_usable_threshold: 0.60
+  clarity_weak_threshold: 0.45
+  nlu_low_confidence_threshold: 0.40
+  min_voiced_ms: 700
+
+tts:
+  enabled: false                    # keep off during dev/calibration to avoid browser reconnects
+  engine_primary: "gtts"            # gtts / xtts / pyttsx3
+  engine_punjabi: "gtts"            # gTTS is the pragmatic Punjabi choice
+  cache_safety_prompts: false       # pre-synth Safety lines at boot
+
+vad:
+  aggressiveness: 2                 # 0=least, 3=most aggressive (webrtcvad)
+  frame_ms: 30
+  min_utterance_ms: 500
+  max_utterance_ms: 15000
+  trailing_silence_ms: 700
+
+
+scheduler:
+  enabled: true
+  poll_seconds: 15
+
+accuracy_criteria:
+  fusion_scenario_pass_rate_min: 1.0
+  acceptance_scenario_pass_rate_min: 1.0
+  nlu_accuracy_min: 0.80
+  nlu_macro_f1_min: 0.80
+  baseline_precision_min: 0.80
+  baseline_recall_min: 0.80
+  asr_wer_max:
+    en: 0.25
+    hi: 0.35
+    pa: 0.50
+  end_to_end_latency_p95_seconds_max: 5.0

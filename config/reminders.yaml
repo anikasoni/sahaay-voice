@@ -1,0 +1,44 @@
+# Sahaay Voice — caregiver-approved reminders.
+# Edit this file (with caregiver's permission) to change what gets reminded.
+
+reminders:
+  - reminder_id: "med-morning-bp"
+    label: "blood pressure medicine"
+    label_hi: "blood pressure ki dawai"
+    label_pa: "blood pressure di dawai"
+    language: "en"
+    time_local: "08:00"
+    recurrence: "daily"
+    max_repeats: 2
+    approved_by_caregiver: true
+
+  - reminder_id: "hydration-noon"
+    label: "drink a glass of water"
+    label_hi: "ek glass paani peena"
+    label_pa: "ik glass paani peena"
+    language: "hi"
+    time_local: "12:00"
+    recurrence: "daily"
+    max_repeats: 2
+    approved_by_caregiver: true
+
+  - reminder_id: "med-evening-sugar"
+    label: "diabetes medicine"
+    label_hi: "sugar ki dawai"
+    label_pa: "sugar di dawai"
+    language: "pa"
+    time_local: "20:00"
+    recurrence: "daily"
+    max_repeats: 3
+    approved_by_caregiver: true
+
+  - reminder_id: "demo-now"
+    # Demo helper: a reminder you can fire from the operator panel anytime
+    label: "demo reminder — take a deep breath"
+    label_hi: "demo yaad dehani — lambi saans lein"
+    label_pa: "demo yaad — lambi saah lavo"
+    language: "en"
+    time_local: "00:00"
+    recurrence: "once"
+    max_repeats: 2
+    approved_by_caregiver: true
