@@ -1,297 +1,411 @@
 # Sahaay Voice
 
-> A multilingual voice companion for elders. Safety. Companionship. Gentle reminders.
-> **Software prototype.** Not a medical device. Does not diagnose. Hardware signals are simulated.
+### An Explainable Multilingual Speech-NLP Layer for Elder Safety, Companionship, and Memory Support
 
-Built to the spec in [`Sahaay_Voice_PRD.docx`](#) (product) and [`Sahaay_Voice_TRD.docx`](#) (technical). Languages: **English · Hindi · Punjabi** (including code-mixed Hinglish-style speech).
+Sahaay Voice is a software prototype of a multilingual voice companion designed for elderly users. It is not a generic chatbot. The system combines automatic speech recognition, speech-behavior feature extraction, multilingual intent understanding, personal-baseline deviation analysis, simulated wearable signals, and an explainable rule-based fusion layer to decide whether to respond normally, check in gently, repeat a reminder, safely deflect a clinical question, or notify a caregiver.
 
----
-
-## What it does
-
-Three modes the user never needs to name:
-
-1. **Safety Mode** — triggered by a simulated wearable event or strong speech-pattern deviation. Asks the elder a short confirmation prompt in their language. A clear "I am okay" closes the loop. A missing, unclear, or off-target reply notifies a caregiver.
-2. **Companion Mode** — warm, dignified conversation. Loneliness and sadness are met with empathy. Self-harm language is intercepted by a hard guardrail before any LLM is involved.
-3. **Memory Mode** — delivers a caregiver-approved reminder (medicine, hydration). Awaits acknowledgment. Repeats up to N times, then escalates.
-
-All medical-style questions ("am I having a stroke?") route to a **safe deflection** template — never a diagnosis — and notify the caregiver.
+> **Important:** Sahaay Voice is a software prototype and **not a medical device**. It does not diagnose stroke, dementia, depression, cardiac events, or any medical condition. Clinical-style questions are routed to a safe deflection response and caregiver notification.
 
 ---
 
-## Quick start
+## Project Overview
 
-```bash
-# 1. Install CUDA-enabled PyTorch first (matches your CUDA version)
-pip install torch --index-url https://download.pytorch.org/whl/cu121
+Elderly users living alone or semi-independently may face three overlapping problems:
 
-# 2. Install everything else
-pip install -r requirements.txt
+1. **Safety concerns** — falls, confusion, delayed response, unclear speech, or distress may require caregiver attention.
+2. **Loneliness and companionship needs** — older adults may want warm, dignified conversation rather than task-only assistant behavior.
+3. **Memory support** — medication, hydration, and routine reminders may need acknowledgement and escalation if ignored.
 
-# 3. Run the app
-streamlit run app/main.py
-```
-
-That's it. The first run downloads the Whisper-medium and XLM-R checkpoints (~3 GB total) into your Hugging Face cache. After that, startup is fast.
-
-**No GPU?** Open `config/thresholds.yaml` and set:
-```yaml
-asr:
-  device: "cpu"
-  compute_type: "int8"
-  model_size: "small"   # or "base"
-```
+Most general-purpose voice assistants are not designed around multilingual Indian elder-care needs, personal speech baselines, caregiver escalation, or safety-first medical boundaries. Sahaay Voice addresses this gap through a modular speech-NLP and decision-fusion prototype.
 
 ---
 
-## The three views
+## Core Innovation
 
-The Streamlit app has three tabs you can keep open side-by-side:
+Sahaay Voice is designed as an **explainable elder-care intelligence layer**, not as a black-box conversational agent.
 
-| Tab | Audience | What's there |
-|---|---|---|
-| **👵 Elder** | the elderly user | Big mic button, current mode pill, large-text response, autoplay audio reply. |
-| **👨‍👩‍👧 Caregiver** | family | Live alerts panel with timestamps, severity, reasons, and the recent transcript. Recent conversation log. |
-| **🛠 Operator** | you, demoing | Trigger simulated wearable events (fall, inactivity). Force Safety Mode in any language. Deliver any reminder. Reset baseline. Wipe all data. |
+For every user turn, the system produces an auditable evidence object containing:
 
-For a recorded demo or a screencast, use the headless runner:
-```bash
-python scripts/run_demo.py samples/my_clip.wav --json
-```
+* ASR transcript
+* detected language
+* ASR confidence estimate
+* speech duration
+* pause burden
+* voice activity ratio
+* speech rate
+* clarity score
+* NLU intent
+* emotion estimate
+* extracted slots
+* personal-baseline z-score deviation
+* fusion decision
+* caregiver alert status
 
----
-
-## Demo walkthrough → PRD §10 acceptance scenarios
-
-These are the scenarios the PRD calls out, with exactly how to demo each:
-
-| # | Scenario | How to demo |
-|---|---|---|
-| **A1** | Safety check after simulated fall, clear reply | Operator → "Fall (high)". Switch to Elder. Record "I am okay" or "main theek hoon". Mode returns to idle. |
-| **A2** | Safety check after fall, no clear reply | Operator → "Fall (high)". Stay silent / mumble. Caregiver tab gets an urgent alert. |
-| **A3** | Reminder acknowledged | Operator → pick a reminder → "Deliver reminder now". Elder records "done" / "ho gaya". Memory closes. |
-| **A4** | Reminder repeated then escalated | Deliver reminder, ignore it, record an unrelated reply (twice more). Caregiver gets a warning. |
-| **A5** | Companion check-in after sadness | Record "I feel so lonely today" / "main akela hoon". You'll get an empathetic line, not a probing question. |
-| **A6** | Clinical question deflection | Record "am I having a stroke?" / "kya mujhe stroke ho raha hai?". Response is the safe-deflection template; caregiver tab gets a warning. |
-| **A7** | Speech deviation soft check-in | Collect a few clean recordings to build the baseline (Operator → snapshot to confirm `sample_count ≥ 5`). Then degrade one (`scripts/degrade_audio.py clip.wav --severity severe`) and record it. You should get a soft check-in. |
-| **A8** | Self-harm language | Record a sentence containing "I want to die". The response is the gentle self-harm template; a caregiver alert fires regardless of LLM availability. |
-| **A9** | Code-mixed (Hinglish) input | Record "main bahut tired hoon today". Detected language tracks naturally; response in the same register. |
-| **A10** | Punjabi reminder | Operator → deliver `med-evening-sugar`. Reply in Punjabi. |
-| **A11** | Operator data wipe | Operator → "Delete all user data". Confirm baseline + logs + alerts cleared. |
-| **A12** | TTS fallback | Disable network temporarily; the cached Safety prompts still play (pre-synthesized at startup). |
+This makes caregiver escalation interpretable rather than arbitrary.
 
 ---
 
-## Project layout
+## Supported Modes
 
-```
-sahaay_voice/
-├─ app/                # Streamlit UI (Elder / Caregiver / Operator tabs)
-├─ core/               # Pipeline modules — each is independently testable
-│  ├─ audio_capture.py # 16kHz mic + VAD utterance segmentation
-│  ├─ asr.py           # faster-whisper, multi-language
-│  ├─ features.py      # latency, pauses, speech rate, clarity, repetition
-│  ├─ nlu.py           # zero-shot XLM-R + optional fine-tuned MuRIL
-│  ├─ baseline.py      # Welford running stats in SQLite — no raw samples kept
-│  ├─ wearable.py      # simulated wearable event publisher
-│  ├─ fusion.py        # rule-based decision: normal / soft / alert / deflect
-│  ├─ alerts.py        # caregiver alert store
-│  ├─ response.py      # template-first responses + guarded LLM hook
-│  ├─ tts.py           # gTTS primary + pyttsx3 fallback + Coqui hook
-│  ├─ dialogue.py      # mode state machine; orchestrates a full turn
-│  ├─ schemas.py       # dataclasses (single source of typed truth)
-│  ├─ logger.py        # JSONL turn logger
-│  └─ config.py        # YAML loader + paths
-├─ config/             # All tunables live here, no code changes needed
-│  ├─ thresholds.yaml  # z-scores, timing, ASR/TTS engine choices
-│  ├─ prompts.yaml     # every user-facing string in en/hi/pa
-│  ├─ reminders.yaml   # caregiver-approved reminders
-│  └─ intents.yaml     # intent labels + example sentences
-├─ scripts/
-│  ├─ run_demo.py      # headless single-file pipeline runner
-│  ├─ evaluate.py      # WER, intent F1, baseline P/R, fusion scenarios
-│  ├─ degrade_audio.py # produce simulated degraded speech
-│  └─ finetune_muril.py# scaffold to fine-tune MuRIL on labeled data
-├─ tests/              # pytest suite — runs in seconds, no GPU needed
-├─ data/               # SQLite baseline, JSONL logs, audio cache — local only
-└─ requirements.txt
-```
+### 1. Safety Mode
+
+Safety Mode is triggered by:
+
+* simulated fall event,
+* abnormal speech pattern relative to baseline,
+* explicit emergency phrase,
+* unclear/off-target safety confirmation.
+
+The system asks a simple confirmation prompt such as:
+
+> “Are you okay? Please say, I am okay.”
+
+If the elder clearly confirms, the loop closes. If the reply is missing, unclear, or off-target, the caregiver panel receives an urgent alert.
 
 ---
 
-## Configuration
+### 2. Companion Mode
 
-Everything you'd want to tweak lives under `config/` and is hot-reloadable from the Operator panel.
+Companion Mode handles routine conversation and loneliness-related expressions. For example:
 
-**`thresholds.yaml`** drives behavior:
-- `baseline.z_high / z_low` — when speech features are "far enough" from the user's normal to trigger a soft check-in.
-- `safety_mode.repetition_threshold` / `clarity_threshold` — how clear and on-target a Safety-Mode reply needs to be.
-- `companion_mode.use_local_llm` — flip to `true` to wire in a local Ollama model (see below).
+> “I feel lonely today.”
 
-**`prompts.yaml`** — every user-facing string in `en`, `hi`, `pa`. Edit freely.
+The system responds with a warm, dignified message. If the speech pattern also deviates from the user’s baseline, the response combines companionship with a gentle wellness check-in instead of immediately alarming the caregiver.
 
-**`reminders.yaml`** — caregiver-approved schedule. Edit the file or replace it with output from your caregiver UI.
+Example:
 
----
-
-## Models — what we chose and why
-
-| Stage | Default | Why |
-|---|---|---|
-| ASR | **faster-whisper `medium`**, `float16`, `cuda` | Sweet spot on a 4070; handles English/Hindi/Punjabi out of the box and detects code-mixed reasonably well. Cold-load ~5s; ~5× realtime after. Swap to `large-v3` in config for better Punjabi at ~2× cost. |
-| NLU | **zero-shot XLM-R/MNLI** (`joeddav/xlm-roberta-large-xnli`) | Works on en/hi/pa with zero labeled data. A MuRIL fine-tune is a one-flag swap-in once you have data — see [Fine-tuning MuRIL](#fine-tuning-muril). |
-| TTS | **gTTS** for all three languages | Pragmatic choice. Local Coqui XTTS-v2 is supported (flip `tts.engine_primary: xtts`) but Punjabi quality is the weakest link in any current local engine; gTTS is the most reliable for demo. Offline `pyttsx3` is the documented fallback per the TRD. |
-| Companion LLM | **disabled by default; templates only** | Safer for a demo, no extra infra. To enable: install Ollama, pull a small instruct model, set `companion_mode.use_local_llm: true` in `thresholds.yaml`. The system prompt is hardened with hard rules in `core/response.py`. **Safety Mode is templates only, ever.** |
+> “I hear you. Being alone can feel heavy sometimes, and I am right here with you. I also noticed your voice sounded a little different today. Are you feeling okay?”
 
 ---
 
-## Fine-tuning MuRIL
+### 3. Memory Support Mode
 
-When you have labeled examples (real users or expanded synthetic):
+Memory Mode delivers caregiver-approved reminders such as medication or hydration reminders.
 
-```bash
-# 1. Build data/intent_train.jsonl with rows like:
-#    {"text": "main theek hoon", "intent": "safety_confirmation"}
+The system waits for acknowledgement:
 
-# 2. Train
-python scripts/finetune_muril.py --epochs 3 --batch 16
+* “done”
+* “I took it”
+* “ho gaya”
+* “dawai le li”
 
-# 3. Activate
-export SAHAAY_FINETUNED=1
-streamlit run app/main.py
-```
-
-If `data/intent_train.jsonl` doesn't exist, the script seeds itself from `config/intents.yaml` — enough to smoke-test the pipeline, *not* enough to outperform zero-shot. Expand it before relying on it.
+If the reminder is not acknowledged after configured repeats, it escalates to the caregiver panel.
 
 ---
 
-## Evaluation
-
-```bash
-# Full battery — only suites with data on disk run
-python scripts/evaluate.py --all
-
-# Just the fusion scenario battery — runs in seconds, no GPU
-python scripts/evaluate.py --fusion
-```
-
-The harness produces `data/eval_report.json` with:
-- **ASR** — WER per language on any folder of `.wav` + sibling `.txt` references.
-- **NLU** — accuracy + macro-F1 on a labeled jsonl test set.
-- **Baseline detection** — precision/recall of soft-check-in trigger on clean vs. degraded paired samples. Generate degraded samples with `scripts/degrade_audio.py`.
-- **Fusion** — pass/fail on a fixed battery covering every TRD §4.7.2 row.
-
----
-
-## Privacy
-
-- **All data stays on this machine.** No analytics, no telemetry, no cloud calls except the TTS request to Google's gTTS endpoint (which sends *response text*, never user speech). To go fully offline, set `tts.engine_primary: pyttsx3` or `xtts`.
-- **No raw audio is stored after a turn closes** unless you point a file path at it. The baseline tracks running mean and variance only (Welford) — no raw feature samples, no recoverable user content.
-- **One-button data wipe.** Operator tab → "Delete all user data" clears the SQLite baseline, all JSONL logs, all alerts, and all cached TTS audio.
-- **Caregiver visibility is bounded.** The caregiver panel shows alerts and a short recent transcript; it does not stream raw audio.
-
-These choices implement PRD §1.3 (privacy posture), FR-36..FR-39 (data minimization and controls), and TRD §9 (local-only storage, operator delete control).
-
----
-
-## Running tests
-
-```bash
-pytest tests/
-```
-
-The default test suite mocks the heavy ASR/NLU models so it runs in a few seconds without GPU. Coverage:
-
-- `test_features.py` — pause stats, clarity bounds, repetition score (exact / partial / unrelated / empty).
-- `test_baseline.py` — Welford correctness, outlier z-score detection, abnormal samples excluded, reset.
-- `test_fusion.py` — every outcome branch in TRD §4.7.2.
-- `test_nlu.py` — keyword fast paths in all three languages + regex slot extraction.
-- `test_dialogue.py` — manager-level scenario tests with mocked ASR/NLU for the PRD §10 acceptance flows.
-
----
-
-## Hardware and out-of-scope reminders
-
-Per PRD §1.2, **hardware wearables are out of scope**. Falls, inactivity, and abnormal motion are simulated through the Operator panel and the `core/wearable.py` publisher API. Wiring a real device would replace `wearable_mod.publish(...)` with a transport that calls the same function from your device-side bridge — no changes to fusion or dialogue.
-
-Per PRD §1.3, **Sahaay Voice never diagnoses anything**. Every clinical question routes to the safe-deflection template, and a caregiver alert is raised. This is enforced in `core/fusion.py` and re-enforced in `core/response.py`; the LLM hook in Companion Mode is hard-disabled in Safety Mode and behind a self-harm guardrail in Companion Mode.
-
----
-
-## License
-
-Prototype code. Add a license file before any external use.
-
-
-## PRD acceptance checker
-
-For a fast no-model verification of the Safety, Companion, Memory, clinical-deflection, self-harm, and code-mixed acceptance paths:
-
-```bash
-python scripts/acceptance_check.py
-```
-
-For objective rule/fusion checks and unit tests:
-
-```bash
-pytest tests/
-python scripts/evaluate.py --fusion
-```
-
-Accuracy targets are configurable in `config/thresholds.yaml` under `accuracy_criteria`.
-
----
-
-## Phase 1 AI evidence panel
-
-The Operator tab now includes **AI pipeline evidence** for the latest turn:
-
-- ASR backend, model size, device, compute type, detected language, transcript, avg log-probability, approximate confidence.
-- Speech processing features: latency, speech duration, internal pauses, voice-activity ratio, speech rate, clarity, Safety repetition score.
-- NLU evidence: intent, confidence, emotion, emotion confidence, slots.
-- Baseline comparator: max z-score, per-feature z-scores, sufficient-history flag.
-- Fusion outcome: normal response, soft check-in, reminder repeat, caregiver alert, or safe deflection, with human-readable reason.
-
-Export recent evidence from logs:
-
-```bash
-python scripts/pipeline_report.py --n 25
-```
-
-This creates:
+## System Architecture
 
 ```text
-data/pipeline_evidence_report.json
-data/pipeline_evidence_report.csv
+Microphone Audio
+      ↓
+Audio Capture / Recording
+      ↓
+Multilingual ASR
+      ↓
+Speech Feature Extraction
+      ↓
+NLU: Intent + Emotion + Slots
+      ↓
+Personal Baseline Comparator
+      ↓
+Simulated Wearable Feed
+      ↓
+Fusion and Escalation Engine
+      ↓
+Dialogue Manager
+      ↓
+Response Generator
+      ↓
+Elder UI / Caregiver Alert Panel / Operator Panel
 ```
 
 ---
 
-## Phase 1.5 — Speech/NLP Evidence Cleanup
+## Key Technical Components
 
-This build adds a more defensible AI evidence layer for evaluators:
+| Component           | Implementation                                             |
+| ------------------- | ---------------------------------------------------------- |
+| User Interface      | Streamlit                                                  |
+| ASR                 | faster-whisper medium                                      |
+| GPU Runtime         | CUDA / float16 on RTX 4070 when available                  |
+| NLU                 | Hybrid deterministic safety rules + multilingual NLU layer |
+| Supported languages | English, Hindi, Punjabi, and code-mixed speech             |
+| Baseline tracking   | Local speech-feature baseline with z-score deviation       |
+| Escalation layer    | Rule-based fusion engine                                   |
+| Storage             | Local SQLite + JSONL logs                                  |
+| Testing             | Pytest + scripted acceptance and fusion tests              |
 
-- **Latency is now estimated as prompt end → first voiced frame**, rather than a fixed zero.
-- **Pause features are separated** into leading silence, trailing silence, and true internal pauses.
-- **Baseline pause tracking uses internal pauses only**, so leaving the recorder open after speaking does not falsely inflate abnormality.
-- **Operator → AI pipeline evidence** shows an interpretation table for each speech feature, including whether it is used in the baseline.
-- **Loneliness + abnormal speech** now produces a combined companion + gentle wellness check-in response instead of jumping straight to a hard Safety prompt.
+---
 
-Validation commands:
+## Explainable AI Evidence
 
-```bash
+Each processed turn stores a structured evidence object. Example fields:
+
+```json
+{
+  "asr": {
+    "transcript": "I feel lonely today",
+    "detected_language": "en",
+    "approx_confidence": 0.64
+  },
+  "speech_features": {
+    "speech_rate_cps": 12.65,
+    "clarity_score": 0.78,
+    "pause_total_ms": 2320
+  },
+  "nlu": {
+    "intent": "loneliness_expression",
+    "emotion": "sad"
+  },
+  "baseline": {
+    "max_z": 7.5,
+    "exceed_count": 2,
+    "sufficient_history": true
+  },
+  "fusion": {
+    "outcome": "soft_check_in",
+    "notify_caregiver": false
+  }
+}
+```
+
+This evidence is useful for debugging, reporting, caregiver review, and academic evaluation.
+
+---
+
+## Evaluation Summary
+
+The current prototype was evaluated using automated tests and controlled scripted scenarios.
+
+| Evaluation Component              |       Result |
+| --------------------------------- | -----------: |
+| Automated unit tests              | 51/51 passed |
+| PRD acceptance scenarios          |   8/8 passed |
+| Fusion and escalation scenarios   |   9/9 passed |
+| Controlled NLU benchmark size     |  66 examples |
+| Number of NLU intent classes      |           11 |
+| Controlled NLU benchmark accuracy |        1.000 |
+| Controlled NLU macro-F1           |        1.000 |
+| Safety-critical intent recall     |        1.000 |
+
+### Safety-Critical Intents Evaluated
+
+* `safety_confirmation`
+* `emergency_help`
+* `clinical_question`
+* `self_harm_risk`
+
+The benchmark is a controlled project-specific validation set designed to verify prototype routing behavior. It should not be interpreted as population-level real-world generalization.
+
+---
+
+## PRD Acceptance Scenarios Covered
+
+| Scenario                                           | Outcome |
+| -------------------------------------------------- | ------- |
+| Safety check after fall with clear reply           | Passed  |
+| Safety check after fall with missing/unclear reply | Passed  |
+| Reminder acknowledged                              | Passed  |
+| Reminder repeated then escalated                   | Passed  |
+| Loneliness expression handled empathetically       | Passed  |
+| Clinical-style question safely deflected           | Passed  |
+| Self-harm language escalated                       | Passed  |
+| Code-mixed input processed                         | Passed  |
+
+---
+
+## Screenshots
+
+Place screenshots inside:
+
+```text
+report_assets/screenshots/
+```
+
+Recommended screenshot names:
+
+```text
+01_prd_acceptance_8_of_8.png
+02_unit_tests_51_passed.png
+03_acceptance_and_fusion_console.png
+04_normal_speech_ai_evidence.png
+05_normal_speech_elder_interface.png
+06_abnormal_speech_soft_checkin.png
+07_abnormal_speech_ai_evidence.png
+```
+
+Suggested Markdown:
+
+```markdown
+![PRD Acceptance Scenarios](report_assets/screenshots/01_prd_acceptance_8_of_8.png)
+
+![Unit Tests](report_assets/screenshots/02_unit_tests_51_passed.png)
+
+![Normal Speech Evidence](report_assets/screenshots/04_normal_speech_ai_evidence.png)
+
+![Abnormal Speech Soft Check-in](report_assets/screenshots/06_abnormal_speech_soft_checkin.png)
+```
+
+---
+
+## Installation
+
+### 1. Create and activate virtual environment
+
+```powershell
+py -3.10 -m venv sv
+.\sv\Scripts\Activate.ps1
+```
+
+### 2. Install CUDA PyTorch
+
+```powershell
+python -m pip install torch --index-url https://download.pytorch.org/whl/cu121
+```
+
+### 3. Install requirements
+
+```powershell
+python -m pip install -r requirements.txt
+```
+
+If `webrtcvad` fails on Windows:
+
+```powershell
+(Get-Content requirements.txt) -replace '^webrtcvad>=2.0.10','webrtcvad-wheels>=2.0.10' | Set-Content requirements.win.txt
+python -m pip install -r requirements.win.txt
+```
+
+---
+
+## Running the App
+
+```powershell
+python -m streamlit run app/main.py --server.fileWatcherType none --server.runOnSave false
+```
+
+The app contains three views:
+
+| Tab       | Purpose                                                               |
+| --------- | --------------------------------------------------------------------- |
+| Elder     | Voice interaction interface                                           |
+| Caregiver | Alert panel with reasons and severity                                 |
+| Operator  | Simulated wearable events, reminders, baseline reset, and AI evidence |
+
+---
+
+## Running Tests and Metrics
+
+### Unit tests
+
+```powershell
 python -m pytest tests -q
+```
+
+### PRD acceptance checks
+
+```powershell
 python scripts/acceptance_check.py
+```
+
+### Fusion scenario evaluation
+
+```powershell
 python scripts/evaluate.py --fusion
-python scripts/pipeline_report.py --n 25
+```
+
+### NLU benchmark
+
+```powershell
+python scripts/evaluate_nlu_dataset.py
+```
+
+### Final project metrics
+
+```powershell
+python scripts/final_project_report_metrics.py
+```
+
+Outputs are saved under:
+
+```text
+data/
+report_assets/metrics/
 ```
 
 ---
 
-## Phase 1.6 — ASR/NLU Quality Gate
+## Baseline Calibration
 
-The app now treats weak speech recognition as an evidence state rather than pretending it understood the elder.
+The personal baseline is built from normal speech samples.
 
-If ordinary Companion/idle speech has low ASR confidence, low clarity, short voiced duration, and low NLU confidence, Sahaay asks the elder to repeat and does **not** update the speech baseline from that noisy turn. Critical safety intents (`clinical_question`, `self_harm_risk`, `emergency_help`, `caregiver_request`, `safety_confirmation`) are never blocked by this gate.
+```powershell
+python scripts/calibrate_microphone.py --n 10 --seconds 5
+```
 
-This prevents outputs like a weak transcript (`"I only today"`) being treated as meaningful casual chat. The Operator evidence panel shows the reason, for example: `ASR/NLU confidence weak; asking elder to repeat`.
+After calibration:
+
+* normal calibrated speech should remain below threshold,
+* abnormal pause-heavy speech should trigger a soft check-in,
+* caregiver alert should not occur unless safety criteria are met.
+
+---
+
+## Safety and Privacy Design
+
+Sahaay Voice follows a conservative safety posture:
+
+* No medical diagnosis.
+* Clinical prompts are deflected.
+* Self-harm language triggers caregiver escalation.
+* Simulated wearable events are used instead of real hardware.
+* Baselines and logs remain local.
+* Raw cloud deployment and SMS/push notifications are outside prototype scope.
+
+---
+
+## Limitations
+
+This prototype has important limitations:
+
+1. It is not clinically validated.
+2. It does not perform real fall detection; wearable events are simulated.
+3. ASR WER has not been reported because a labeled `.wav + transcript` benchmark was not created.
+4. The NLU benchmark is controlled and project-specific.
+5. Punjabi ASR/TTS quality may vary.
+6. The current implementation is a local software prototype, not a production caregiver platform.
+
+---
+
+## Future Work
+
+Planned improvements include:
+
+* Larger multilingual speech dataset with elderly speakers.
+* ASR WER benchmarking using labeled audio.
+* Fine-tuned MuRIL or IndicBERT intent classifier.
+* Improved Punjabi ASR/TTS pipeline.
+* Integration with real wearable sensors.
+* Caregiver mobile app with push notifications.
+* Longitudinal baseline adaptation and drift handling.
+* Deployment as a local home voice hub.
+
+---
+
+## Repository
+
+Code link:
+
+```text
+https://github.com/anikasoni/sahaay-voice
+```
+
+---
+
+## Author
+
+**Anika Soni**
+Roll Number: **102303912**
+Individual Project
+Under the Guidance of: **Dr. Jasmeet Singh / Dr. Simran Setia**
+Thapar Institute of Engineering and Technology
